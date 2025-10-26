@@ -35,7 +35,7 @@ projects:
       - key: DEBUG
         value: false
       - key: CORS_ORIGINS
-        value: https://jadebank.com,https://www.jadebank.com
+        value: '["*"]'
       - key: RATE_LIMIT_ENABLED
         value: true
       - key: ALGORITHM
