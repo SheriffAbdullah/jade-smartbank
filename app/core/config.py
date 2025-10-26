@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     database_max_overflow: int = 20
 
     # CORS
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
 
     # Logging
     log_level: str = "INFO"
