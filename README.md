@@ -5,8 +5,9 @@
 ## 🌐 Live Deployments
 
 **Frontend (Vercel)**: https://jade-smartbank-frontend.vercel.app
+
 **Backend API (Render)**: https://jade-smartbank-api.onrender.com
-**API Documentation**: https://jade-smartbank-api.onrender.com/api/docs
+**API Documentation**: https://jade-smartbank-api.onrender.com/api/docs (disabled due to prod)
 
 ---
 
