@@ -2,7 +2,7 @@
 
 SECURITY: Registration, login, KYC with rate limiting and audit.
 """
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_client_ip, get_current_user_id
@@ -54,9 +54,11 @@ async def register(
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception as e:
+        import logging
+        logging.error(f"Registration failed: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Registration failed",
+            detail=f"Registration failed: {str(e)}",
         )
 
 
@@ -105,8 +107,10 @@ async def login(
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
     except Exception as e:
+        import logging
+        logging.error(f"Login failed: {str(e)}", exc_info=True)
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Login failed"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Login failed: {str(e)}"
         )
 
 
@@ -152,7 +156,9 @@ async def get_me(
 )
 async def upload_kyc_document(
     request: Request,
-    data: KYCDocumentUpload,
+    document_type: str = Form(...),
+    document_number: str = Form(...),
+    file: UploadFile = File(...),
     user_id: str = Depends(get_current_user_id),
     db: Session = Depends(get_db),
     ip_address: str = Depends(get_client_ip),
@@ -161,14 +167,14 @@ async def upload_kyc_document(
 
     SECURITY:
     - Requires authentication
-    - Validates document format
-    - Simulates document storage
+    - Validates document format and file type
+    - Stores document file
 
     Returns:
         KYCDocumentResponse: Uploaded document details
     """
     try:
-        document = KYCService.upload_document(db, user_id, data, ip_address)
+        document = await KYCService.upload_document(db, user_id, document_type, document_number, file, ip_address)
         return KYCDocumentResponse(
             document_id=str(document.id),
             document_type=document.document_type,

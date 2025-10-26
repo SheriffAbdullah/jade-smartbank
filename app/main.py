@@ -48,7 +48,7 @@ app.add_middleware(
 if not settings.debug:
     app.add_middleware(
         TrustedHostMiddleware,
-        allowed_hosts=["*.jadebank.com", "localhost", "127.0.0.1"]
+        allowed_hosts=["*.jadebank.com", "*.onrender.com", "localhost", "127.0.0.1"]
     )
 
 

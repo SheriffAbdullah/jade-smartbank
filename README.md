@@ -1,8 +1,11 @@
 # 🏦 Jade SmartBank
 
-**Secure Banking Platform for India** - A modern, cloud-ready banking API built with FastAPI, PostgreSQL, and industry-standard security practices.
+**Secure Banking Platform for India** - A complete full-stack banking application built with FastAPI, React, PostgreSQL, and industry-standard security practices.
 
-Frontend at: https://github.com/SheriffAbdullah/jade-smartbank-frontend
+**🎉 FULL-STACK MVP COMPLETE & RUNNING!**
+
+**Frontend**: Located at `../jade-smartbank-frontend/` (separate repository ready for deployment)
+**Backend**: This repository (100% complete with 22 API endpoints)
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
@@ -14,12 +17,28 @@ Frontend at: https://github.com/SheriffAbdullah/jade-smartbank-frontend
 
 ## 🚀 Features
 
+### ✅ Complete Full-Stack Application
+
+**Backend (FastAPI)**
+- 22 REST API endpoints (100% complete)
+- 5 Service layers with business logic
+- JWT authentication & authorization
+- Rate limiting & security features
+- PostgreSQL with Alembic migrations
+
+**Frontend (React + TypeScript)**
+- Modern UI with Tailwind CSS
+- 7 pages (Login, Register, Dashboard, Accounts, Transactions, Loans, Profile)
+- Complete API integration
+- Protected routes & auth state management
+- Responsive design (mobile, tablet, desktop)
+
 ### ✅ Implemented Use Cases
 
-- **Use Case 1**: User Registration & KYC Verification
-- **Use Case 2**: Account Creation (Savings/Current/FD)
-- **Use Case 3**: Money Transfer & Transactions
-- **Use Case 4**: Loan Application & EMI Management
+- **Use Case 1**: User Registration & KYC Verification ✅
+- **Use Case 2**: Account Creation (Savings/Current/FD) ✅
+- **Use Case 3**: Money Transfer & Transactions ✅
+- **Use Case 4**: Loan Application & EMI Management ✅
 
 ### 🔐 Security Features
 
@@ -38,13 +57,22 @@ Frontend at: https://github.com/SheriffAbdullah/jade-smartbank-frontend
 - **Account Numbers**: 9-18 digit validation
 - **Currency**: INR (₹) with Decimal precision
 
-### 🏗️ Architecture
+### 🏗️ Full-Stack Architecture
 
+**Backend**
 - **Framework**: FastAPI (async, high-performance)
 - **Database**: PostgreSQL with SQLAlchemy ORM
 - **Migrations**: Alembic for version control
 - **Deployment**: Docker + Docker Compose
 - **Cloud**: Render.com ready (one-click deploy)
+
+**Frontend**
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite (fast builds & HMR)
+- **Styling**: Tailwind CSS
+- **Routing**: React Router v6
+- **HTTP Client**: Axios with interceptors
+- **Deployment**: Vercel ready (one-click deploy)
 
 ---
 
@@ -52,11 +80,65 @@ Frontend at: https://github.com/SheriffAbdullah/jade-smartbank-frontend
 
 ### Prerequisites
 
+**Backend**
 - Python 3.11+
 - PostgreSQL 15+
 - Docker & Docker Compose (optional)
 
-### Option 1: Docker Compose (Recommended)
+**Frontend**
+- Node.js 18+
+- npm or yarn
+
+### Option 1: Full-Stack Local Development (Recommended)
+
+```bash
+# ===== BACKEND SETUP =====
+# Clone repository
+git clone https://github.com/yourusername/jade-smartbank.git
+cd jade-smartbank
+
+# Setup environment
+cp .env.example .env
+# Edit .env and set:
+# SECRET_KEY=<generate with: python -c "import secrets; print(secrets.token_urlsafe(32))">
+# DATABASE_URL=postgresql://user:pass@localhost:5432/jade_smartbank
+# CORS_ORIGINS=["http://localhost:3000", "http://localhost:5173"]
+
+# Create database
+createdb jade_smartbank
+
+# Install dependencies (using venv or docker)
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Run migrations
+alembic upgrade head
+
+# Start backend
+uvicorn app.main:app --reload
+# Backend running at http://localhost:8000
+
+# ===== FRONTEND SETUP (in new terminal) =====
+cd ../jade-smartbank-frontend
+
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env
+# Default VITE_API_BASE_URL=http://localhost:8000/api/v1 should work
+
+# Start frontend
+npm run dev
+# Frontend running at http://localhost:5173
+
+# ===== ACCESS THE APP =====
+# Open browser: http://localhost:5173
+# API Docs: http://localhost:8000/api/docs
+```
+
+### Option 2: Docker Compose (Backend Only)
 
 ```bash
 # Clone repository
@@ -200,18 +282,34 @@ pytest -v
 
 ## 🚀 Deployment
 
-### Render.com (One-Click Deploy)
+### Full-Stack Deployment
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
+**Backend: Render.com** [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
 
-1. Click "Deploy to Render"
-2. Connect GitHub repository
-3. Render auto-configures from `render.yaml`
-4. API goes live at: `https://jade-smartbank-api.onrender.com`
+```bash
+# 1. Backend on Render
+# - Push backend code to GitHub
+# - Connect repository to Render
+# - Render auto-configures from render.yaml
+# - API goes live at: https://jade-smartbank-api.onrender.com
+
+# 2. Update CORS in backend .env
+# CORS_ORIGINS=["https://your-frontend.vercel.app"]
+```
+
+**Frontend: Vercel** [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new)
+
+```bash
+# 1. Frontend on Vercel
+# - Push frontend code to separate GitHub repo
+# - Import project in Vercel
+# - Set environment variable: VITE_API_BASE_URL=https://your-backend.onrender.com/api/v1
+# - Frontend goes live at: https://jade-smartbank.vercel.app
+```
 
 **See**: [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment guide
 
-### Manual Deployment
+### Manual Docker Deployment (Backend)
 
 ```bash
 # Build Docker image
@@ -221,6 +319,7 @@ docker build -t jade-smartbank .
 docker run -p 8000:8000 \
   -e DATABASE_URL=$DATABASE_URL \
   -e SECRET_KEY=$SECRET_KEY \
+  -e CORS_ORIGINS='["https://your-frontend.com"]' \
   jade-smartbank
 ```
 
@@ -228,10 +327,17 @@ docker run -p 8000:8000 \
 
 ## 📁 Project Structure
 
+### Backend (This Repository)
+
 ```
 jade-smartbank/
 ├── app/
-│   ├── api/v1/routes/          # API endpoints (TODO)
+│   ├── api/v1/routes/          # API endpoints ✅ COMPLETE
+│   │   ├── auth.py            # Authentication & KYC
+│   │   ├── accounts.py        # Account management
+│   │   ├── transactions.py    # Money transfers
+│   │   ├── loans.py           # Loan operations
+│   │   └── admin.py           # Admin operations
 │   ├── core/                   # Config, security, validation
 │   │   ├── config.py          # Environment configuration
 │   │   ├── security.py        # Password, JWT helpers
@@ -242,7 +348,7 @@ jade-smartbank/
 │   ├── db/                    # Database setup
 │   │   ├── base.py           # SQLAlchemy base
 │   │   └── __init__.py
-│   ├── models/               # SQLAlchemy models (9 tables)
+│   ├── models/               # SQLAlchemy models ✅ COMPLETE (9 tables)
 │   │   ├── user.py
 │   │   ├── kyc_document.py
 │   │   ├── account.py
@@ -252,10 +358,22 @@ jade-smartbank/
 │   │   ├── loan_emi_payment.py
 │   │   ├── audit_log.py
 │   │   └── refresh_token.py
-│   ├── schemas/              # Pydantic schemas (TODO)
-│   ├── services/             # Business logic (TODO)
-│   ├── repositories/         # Data access (TODO)
-│   ├── tests/                # Test suite
+│   ├── schemas/              # Pydantic schemas ✅ COMPLETE (5 files)
+│   │   ├── auth.py
+│   │   ├── kyc.py
+│   │   ├── account.py
+│   │   ├── transaction.py
+│   │   └── loan.py
+│   ├── services/             # Business logic ✅ COMPLETE (5 files)
+│   │   ├── auth_service.py
+│   │   ├── kyc_service.py
+│   │   ├── account_service.py
+│   │   ├── transaction_service.py
+│   │   └── loan_service.py
+│   ├── utils/                # Utilities ✅ COMPLETE
+│   │   ├── account_generator.py
+│   │   └── emi_calculator.py
+│   ├── tests/                # Test suite (44 tests)
 │   │   ├── test_security.py
 │   │   ├── test_validation.py
 │   │   └── conftest.py
@@ -279,7 +397,46 @@ jade-smartbank/
 ├── DEPLOYMENT.md            # Deployment guide
 ├── SECURITY.md              # Security documentation
 ├── SETUP.md                 # Setup instructions
+├── IMPLEMENTATION_STATUS.md  # Progress tracker
+├── MVP_COMPLETE.md          # Completion summary
 └── README.md                # This file
+```
+
+### Frontend (Separate Repository)
+
+```
+jade-smartbank-frontend/
+├── src/
+│   ├── api/                  # API service layer ✅ COMPLETE
+│   │   ├── client.ts        # Axios setup + interceptors
+│   │   ├── auth.ts          # Auth endpoints
+│   │   ├── accounts.ts      # Account endpoints
+│   │   ├── transactions.ts  # Transaction endpoints
+│   │   └── loans.ts         # Loan endpoints
+│   ├── components/          # Reusable components ✅ COMPLETE
+│   │   ├── Layout.tsx       # Main layout with sidebar
+│   │   ├── Card.tsx         # Card component
+│   │   ├── Button.tsx       # Button component
+│   │   └── Input.tsx        # Input component
+│   ├── contexts/            # React contexts
+│   │   └── AuthContext.tsx  # Auth state management
+│   ├── pages/               # 7 pages ✅ COMPLETE
+│   │   ├── Login.tsx
+│   │   ├── Register.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── Accounts.tsx
+│   │   ├── Transactions.tsx
+│   │   ├── Loans.tsx
+│   │   └── Profile.tsx
+│   ├── types/               # TypeScript types
+│   │   └── index.ts
+│   ├── App.tsx              # Routing & protected routes
+│   └── main.tsx             # Entry point
+├── vercel.json              # Vercel deployment config
+├── tailwind.config.js       # Tailwind setup
+├── package.json             # Dependencies
+├── README.md                # Frontend documentation
+└── SETUP_GUIDE.md          # Quick start guide
 ```
 
 ---
@@ -386,28 +543,44 @@ DATABASE_URL=postgresql://user:pass@localhost:5432/jade_smartbank
 
 # Optional (with defaults)
 DEBUG=false
-CORS_ORIGINS=http://localhost:3000
+# IMPORTANT: Add both frontend development and production URLs
+CORS_ORIGINS=["http://localhost:3000", "http://localhost:5173", "https://your-frontend.vercel.app"]
 RATE_LIMIT_ENABLED=true
 ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
 ```
+
+**Important Notes:**
+- `CORS_ORIGINS` must include your frontend URL to allow API requests
+- For local development: Include `http://localhost:5173` (Vite default port)
+- For production: Add your deployed frontend URL
+- Generate `SECRET_KEY` with: `python -c "import secrets; print(secrets.token_urlsafe(32))"`
 
 ---
 
 ## 📚 Documentation
 
+**Backend Documentation**
 - **[PRD](DOCS/PRD.md)** - Product Requirements
 - **[Database Design](DOCS/DATABASE_DESIGN.md)** - Complete schema
-- **[API Endpoints](DOCS/API_ENDPOINTS.md)** - All 27 endpoints
+- **[API Endpoints](DOCS/API_ENDPOINTS.md)** - All 22 endpoints
 - **[Quick Reference](DOCS/QUICK_REFERENCE.md)** - Cheat sheet
 - **[Security](SECURITY.md)** - Security features
 - **[Setup](SETUP.md)** - Development setup
 - **[Deployment](DEPLOYMENT.md)** - Cloud deployment
+- **[Implementation Status](IMPLEMENTATION_STATUS.md)** - Progress tracker
+- **[MVP Complete](MVP_COMPLETE.md)** - Completion summary
+
+**Frontend Documentation**
+- **[Frontend README](../jade-smartbank-frontend/README.md)** - Frontend overview
+- **[Setup Guide](../jade-smartbank-frontend/SETUP_GUIDE.md)** - Quick start
+- **Interactive Swagger**: http://localhost:8000/api/docs
 
 ---
 
 ## 🎯 Roadmap
 
-### ✅ Phase 1: Core Features (Current)
+### ✅ Phase 1: Core Features (COMPLETE)
 - [x] User Registration & KYC
 - [x] Account Creation
 - [x] Money Transfer
@@ -416,26 +589,39 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 - [x] Database models
 - [x] Docker & deployment config
 
-### 🚧 Phase 2: API Implementation (Next)
-- [ ] Pydantic schemas
-- [ ] Service layer
-- [ ] FastAPI routes
-- [ ] Integration tests
-- [ ] Swagger documentation
+### ✅ Phase 2: Full Stack MVP (COMPLETE)
+- [x] Pydantic schemas (5 files)
+- [x] Service layer (5 services)
+- [x] FastAPI routes (22 endpoints)
+- [x] Unit tests (44 tests)
+- [x] Swagger documentation
+- [x] React frontend (7 pages)
+- [x] Full API integration
+- [x] CORS configuration
+- [x] Production deployment configs
 
-### 📅 Phase 3: Advanced Features
+### 🚀 Phase 3: Production Launch (CURRENT)
+- [ ] Deploy backend to Render
+- [ ] Deploy frontend to Vercel
+- [ ] Integration tests
+- [ ] Load testing
+- [ ] Performance optimization
+- [ ] User acceptance testing
+
+### 📅 Phase 4: Advanced Features
 - [ ] Scheduled payments
 - [ ] Bill payments
 - [ ] Card management
 - [ ] Investment accounts
 - [ ] Mobile app API
+- [ ] Fraud detection ML model
 
-### 🔮 Phase 4: Scale & Optimize
+### 🔮 Phase 5: Scale & Optimize
 - [ ] Redis caching
 - [ ] Background jobs (Celery)
 - [ ] Real-time notifications
 - [ ] Analytics dashboard
-- [ ] Load testing & optimization
+- [ ] Microservices architecture
 
 ---
 
@@ -447,16 +633,50 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
+**Backend Support**
 - **Documentation**: [/DOCS](DOCS/)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/jade-smartbank/issues)
+- **API Docs**: http://localhost:8000/api/docs (local) or `/api/docs` (production)
+
+**Frontend Support**
+- **Documentation**: [Frontend README](../jade-smartbank-frontend/README.md)
+- **Setup Guide**: [SETUP_GUIDE](../jade-smartbank-frontend/SETUP_GUIDE.md)
+
+**General**
 - **Email**: support@jadebank.com
+- **Status**: MVP Complete & Running ✅
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for secure banking**
+**🎉 FULL-STACK MVP COMPLETE!**
 
-[Documentation](DOCS/) • [API Reference](DOCS/API_ENDPOINTS.md) • [Security](SECURITY.md) • [Deploy](DEPLOYMENT.md)
+**Made with ❤️ for secure banking in India**
+
+---
+
+**Quick Links**
+
+[📚 Documentation](DOCS/) • [🔗 API Reference](DOCS/API_ENDPOINTS.md) • [🔒 Security](SECURITY.md) • [🚀 Deploy](DEPLOYMENT.md)
+
+[💻 Frontend Docs](../jade-smartbank-frontend/README.md) • [⚡ Quick Start](QUICKSTART.md) • [📊 Status](IMPLEMENTATION_STATUS.md)
+
+---
+
+**Current Status**
+- ✅ Backend: 22 API endpoints running
+- ✅ Frontend: React app with 7 pages
+- ✅ Database: 9 models with migrations
+- ✅ Security: JWT, rate limiting, validation
+- ✅ Testing: 44 unit tests
+- ✅ Ready for deployment!
+
+**Try it now:**
+```bash
+# Backend: http://localhost:8000
+# Frontend: http://localhost:5173
+# API Docs: http://localhost:8000/api/docs
+```
 
 </div>
