@@ -65,6 +65,15 @@ async def startup_event():
         logger.info("Initializing database tables...")
         init_db()
         logger.info("Database tables initialized successfully")
+
+        # Seed dummy data for demo (only runs once)
+        try:
+            from seed_dummy_data import seed_data
+            seed_data()
+        except Exception as seed_error:
+            logger.warning(f"Dummy data seeding skipped: {seed_error}")
+            # Don't fail - data might already exist
+
     except Exception as e:
         logger.error(f"Database initialization error: {e}")
         # Don't fail startup - tables might already exist
