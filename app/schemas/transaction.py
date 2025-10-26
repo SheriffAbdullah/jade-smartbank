@@ -101,3 +101,41 @@ class TransactionResponse(BaseModel):
     class Config:
         from_attributes = True
         json_encoders = {Decimal: float}
+
+
+class TransferResponse(TransactionResponse):
+    """Money transfer response schema."""
+    pass
+
+
+class DepositResponse(TransactionResponse):
+    """Deposit response schema."""
+    pass
+
+
+class WithdrawResponse(TransactionResponse):
+    """Withdrawal response schema."""
+    pass
+
+
+class TransactionFilter(BaseModel):
+    """Transaction filter schema for querying."""
+
+    transaction_type: Optional[str] = None
+    transaction_status: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    min_amount: Optional[Decimal] = None
+    max_amount: Optional[Decimal] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "transaction_type": "transfer",
+                "transaction_status": "completed",
+                "start_date": "2025-01-01T00:00:00",
+                "end_date": "2025-12-31T23:59:59",
+                "min_amount": 1000.00,
+                "max_amount": 50000.00,
+            }
+        }

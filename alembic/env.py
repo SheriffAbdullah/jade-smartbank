@@ -2,11 +2,16 @@
 
 SECURITY: Database migration management.
 """
+import sys
+from pathlib import Path
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # Import app config and models
 from app.core.config import get_settings
