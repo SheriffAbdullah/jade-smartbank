@@ -2,9 +2,18 @@
 
 **Secure Banking Platform for India** - A complete full-stack banking application built with FastAPI, React, PostgreSQL, and industry-standard security practices.
 
-**🎉 FULL-STACK MVP COMPLETE & RUNNING!**
+**🎉 FULL-STACK MVP COMPLETE & LIVE!**
 
-**Frontend**: Located at `../jade-smartbank-frontend/` (separate repository ready for deployment)
+## 🌐 Live Deployments
+
+**Frontend (Vercel)**: https://jade-smartbank-frontend.vercel.app
+**Backend API (Render)**: https://jade-smartbank-api.onrender.com
+**API Documentation**: https://jade-smartbank-api.onrender.com/api/docs
+
+---
+
+**Repositories**
+**Frontend**: https://github.com/SheriffAbdullah/jade-smartbank-frontend
 **Backend**: This repository (100% complete with 22 API endpoints)
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
