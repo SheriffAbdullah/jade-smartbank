@@ -48,7 +48,7 @@ class AccountCreate(BaseModel):
 class AccountResponse(BaseModel):
     """Account response schema."""
 
-    account_id: str
+    id: str
     account_number: str
     account_type: str
     ifsc_code: str

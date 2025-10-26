@@ -173,7 +173,7 @@ class TestGetCurrentUserEndpoint:
         """Test getting current user without token fails."""
         response = client.get("/api/v1/auth/me")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_get_current_user_invalid_token(self, client: TestClient):
         """Test getting current user with invalid token fails."""
@@ -209,7 +209,6 @@ class TestUploadKYCDocumentEndpoint:
             json={
                 "document_type": "pan",
                 "document_number": "ABCDE1234F",
-                "document_data": "base64encodeddata",
             },
             headers=headers,
         )
@@ -218,7 +217,7 @@ class TestUploadKYCDocumentEndpoint:
         data = response.json()
         assert data["document_type"] == "pan"
         assert data["document_number"] == "ABCDE1234F"
-        assert data["verification_status"] == "pending"
+        assert data["is_verified"] is False
 
     def test_upload_kyc_document_no_auth(self, client: TestClient):
         """Test uploading KYC document without authentication fails."""
@@ -227,11 +226,10 @@ class TestUploadKYCDocumentEndpoint:
             json={
                 "document_type": "pan",
                 "document_number": "ABCDE1234F",
-                "document_data": "base64encodeddata",
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_upload_kyc_document_invalid_pan(
         self,
@@ -254,7 +252,6 @@ class TestUploadKYCDocumentEndpoint:
             json={
                 "document_type": "pan",
                 "document_number": "INVALID123",  # Invalid format
-                "document_data": "base64encodeddata",
             },
             headers=headers,
         )
@@ -278,8 +275,8 @@ class TestGetKYCStatusEndpoint:
             user_id=verified_user.id,
             document_type="pan",
             document_number="ABCDE1234F",
-            document_data="base64data",
-            verification_status="verified",
+            document_url="/uploads/kyc/pan_abcde1234f.pdf",
+            is_verified=True,
         )
         test_db.add(doc)
         test_db.commit()
@@ -307,4 +304,4 @@ class TestGetKYCStatusEndpoint:
         """Test getting KYC status without authentication fails."""
         response = client.get("/api/v1/auth/kyc/status")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN

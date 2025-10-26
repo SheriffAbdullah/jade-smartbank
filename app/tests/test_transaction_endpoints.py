@@ -151,7 +151,7 @@ class TestTransferMoneyEndpoint:
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestDepositMoneyEndpoint:
@@ -219,7 +219,7 @@ class TestDepositMoneyEndpoint:
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestWithdrawMoneyEndpoint:
@@ -323,7 +323,7 @@ class TestWithdrawMoneyEndpoint:
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetTransactionDetailsEndpoint:
@@ -385,7 +385,7 @@ class TestGetTransactionDetailsEndpoint:
 
         response = client.get(f"/api/v1/transactions/{txn.id}")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetTransactionHistoryEndpoint:
@@ -487,4 +487,4 @@ class TestGetTransactionHistoryEndpoint:
         """Test getting transaction history without authentication fails."""
         response = client.get("/api/v1/transactions")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN

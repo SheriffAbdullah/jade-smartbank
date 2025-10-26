@@ -67,7 +67,7 @@ class KYCService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="kyc_document",
-            resource_id=document.id,
+            resource_id=str(document.id),
             details={
                 "document_type": request.document_type,
                 "document_number": request.document_number,
@@ -153,7 +153,7 @@ class KYCService:
             user_id=admin_id,
             ip_address=ip_address,
             resource_type="kyc_document",
-            resource_id=document.id,
+            resource_id=str(document.id),
             details={
                 "action": "verified" if is_verified else "rejected",
                 "user_id": str(document.user_id),

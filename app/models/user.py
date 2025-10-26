@@ -58,9 +58,19 @@ class User(Base):
     last_login = Column(DateTime)
 
     # Relationships
-    kyc_documents = relationship("KYCDocument", back_populates="user", cascade="all, delete-orphan")
+    kyc_documents = relationship(
+        "KYCDocument",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        foreign_keys="[KYCDocument.user_id]"
+    )
     accounts = relationship("Account", back_populates="user", cascade="all, delete-orphan")
-    loans = relationship("Loan", back_populates="user", cascade="all, delete-orphan")
+    loans = relationship(
+        "Loan",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        foreign_keys="[Loan.user_id]"
+    )
     refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
     audit_logs = relationship("AuditLog", back_populates="user")
 

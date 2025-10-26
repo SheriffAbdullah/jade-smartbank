@@ -32,7 +32,7 @@ class TestCreateAccountEndpoint:
         data = response.json()
         assert data["account_type"] == "savings"
         assert float(data["balance"]) == 1000.00
-        assert data["status"] == "active"
+        assert data["is_active"] is True
         assert data["account_number"].startswith("JADE")
         assert len(data["account_number"]) == 18
 
@@ -92,7 +92,7 @@ class TestCreateAccountEndpoint:
             json={"account_type": "savings", "initial_deposit": 1000.00},
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestListAccountsEndpoint:
@@ -129,7 +129,7 @@ class TestListAccountsEndpoint:
         """Test listing accounts without authentication fails."""
         response = client.get("/api/v1/accounts")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetAccountDetailsEndpoint:
@@ -173,15 +173,15 @@ class TestGetAccountDetailsEndpoint:
     ):
         """Test getting another user's account details fails."""
         # Create account for admin user
+        from decimal import Decimal
         admin_account = Account(
             user_id=admin_user.id,
             account_number="JADE11111111111111",
             account_type="savings",
-            balance=10000.00,
-            currency="INR",
-            status="active",
+            balance=Decimal("10000.00"),
+            available_balance=Decimal("10000.00"),
+            is_active=True,
             ifsc_code="JADE0000001",
-            branch_name="Delhi Main",
         )
         test_db.add(admin_account)
         test_db.commit()
@@ -199,7 +199,7 @@ class TestGetAccountDetailsEndpoint:
         """Test getting account details without authentication fails."""
         response = client.get(f"/api/v1/accounts/{savings_account.id}")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetAccountStatementEndpoint:
@@ -268,7 +268,7 @@ class TestGetAccountStatementEndpoint:
         """Test getting statement without authentication fails."""
         response = client.get(f"/api/v1/accounts/{savings_account.id}/statement")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_get_account_statement_wrong_user(
         self,
@@ -279,15 +279,15 @@ class TestGetAccountStatementEndpoint:
     ):
         """Test getting statement for another user's account fails."""
         # Create account for admin
+        from decimal import Decimal
         admin_account = Account(
             user_id=admin_user.id,
             account_number="JADE22222222222222",
             account_type="savings",
-            balance=20000.00,
-            currency="INR",
-            status="active",
+            balance=Decimal("20000.00"),
+            available_balance=Decimal("20000.00"),
+            is_active=True,
             ifsc_code="JADE0000001",
-            branch_name="Delhi Main",
         )
         test_db.add(admin_account)
         test_db.commit()

@@ -98,7 +98,7 @@ class AccountService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="account",
-            resource_id=account.id,
+            resource_id=str(account.id),
             details={
                 "account_number": account_number,
                 "account_type": request.account_type,

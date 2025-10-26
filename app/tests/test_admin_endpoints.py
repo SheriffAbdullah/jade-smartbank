@@ -32,8 +32,8 @@ class TestVerifyKYCDocumentEndpoint:
             user_id=unverified_user.id,
             document_type="pan",
             document_number="ABCDE1234F",
-            document_data="base64encodeddata",
-            verification_status="pending",
+            document_url="/uploads/kyc/test_document.pdf",
+            is_verified=False,
         )
         test_db.add(doc)
         test_db.commit()
@@ -46,7 +46,7 @@ class TestVerifyKYCDocumentEndpoint:
 
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
-        assert data["verification_status"] == "verified"
+        assert data["is_verified"] is True
         assert data["verified_by"] == str(admin_user.id)
 
         # Verify user KYC status updated
@@ -66,8 +66,8 @@ class TestVerifyKYCDocumentEndpoint:
             user_id=unverified_user.id,
             document_type="pan",
             document_number="INVALID123",
-            document_data="base64encodeddata",
-            verification_status="pending",
+            document_url="/uploads/kyc/test_document.pdf",
+            is_verified=False,
         )
         test_db.add(doc)
         test_db.commit()
@@ -83,7 +83,7 @@ class TestVerifyKYCDocumentEndpoint:
 
         assert response.status_code == status.HTTP_200_OK
         data = response.json()
-        assert data["verification_status"] == "rejected"
+        assert data["is_verified"] is False
         assert "not clear" in data["admin_notes"]
 
     def test_verify_kyc_document_not_admin(
@@ -99,8 +99,8 @@ class TestVerifyKYCDocumentEndpoint:
             user_id=unverified_user.id,
             document_type="pan",
             document_number="ABCDE1234F",
-            document_data="base64encodeddata",
-            verification_status="pending",
+            document_url="/uploads/kyc/test_document.pdf",
+            is_verified=False,
         )
         test_db.add(doc)
         test_db.commit()
@@ -135,8 +135,8 @@ class TestVerifyKYCDocumentEndpoint:
             user_id=unverified_user.id,
             document_type="pan",
             document_number="ABCDE1234F",
-            document_data="base64encodeddata",
-            verification_status="pending",
+            document_url="/uploads/kyc/test_document.pdf",
+            is_verified=False,
         )
         test_db.add(doc)
         test_db.commit()
@@ -146,7 +146,7 @@ class TestVerifyKYCDocumentEndpoint:
             json={"action": "approve", "admin_notes": "Test"},
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_verify_kyc_document_already_verified(
         self,
@@ -160,8 +160,8 @@ class TestVerifyKYCDocumentEndpoint:
             user_id=unverified_user.id,
             document_type="pan",
             document_number="ABCDE1234F",
-            document_data="base64encodeddata",
-            verification_status="verified",  # Already verified
+            document_url="/uploads/kyc/test_document.pdf",
+            is_verified=True,  # Already verified
         )
         test_db.add(doc)
         test_db.commit()
@@ -324,7 +324,7 @@ class TestReviewLoanEndpoint:
             json={"action": "approve"},
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_approve_loan_already_approved(
         self,

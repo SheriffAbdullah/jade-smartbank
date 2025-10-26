@@ -154,7 +154,7 @@ class TransactionService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="transaction",
-            resource_id=transaction.id,
+            resource_id=str(transaction.id),
             details={
                 "type": "transfer",
                 "amount": str(request.amount),
@@ -234,7 +234,7 @@ class TransactionService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="transaction",
-            resource_id=transaction.id,
+            resource_id=str(transaction.id),
             details={
                 "type": "deposit",
                 "amount": str(request.amount),
@@ -320,7 +320,7 @@ class TransactionService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="transaction",
-            resource_id=transaction.id,
+            resource_id=str(transaction.id),
             details={
                 "type": "withdrawal",
                 "amount": str(request.amount),

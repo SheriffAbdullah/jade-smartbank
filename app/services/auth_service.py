@@ -84,7 +84,7 @@ class AuthService:
             user_id=str(user.id),
             ip_address=ip_address,
             resource_type="user",
-            resource_id=user.id,
+            resource_id=str(user.id),
             details={"email": user.email, "phone": user.phone},
         )
 

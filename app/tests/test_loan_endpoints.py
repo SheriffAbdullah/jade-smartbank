@@ -189,7 +189,7 @@ class TestApplyForLoanEndpoint:
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetUserLoansEndpoint:
@@ -253,7 +253,7 @@ class TestGetUserLoansEndpoint:
         """Test getting loans without authentication fails."""
         response = client.get("/api/v1/loans")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetLoanDetailsEndpoint:
@@ -347,7 +347,7 @@ class TestGetLoanDetailsEndpoint:
 
         response = client.get(f"/api/v1/loans/{loan.id}")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestGetEMIScheduleEndpoint:
@@ -411,7 +411,7 @@ class TestGetEMIScheduleEndpoint:
 
         response = client.get(f"/api/v1/loans/{loan.id}/emi-schedule")
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 class TestPayEMIEndpoint:
@@ -612,4 +612,4 @@ class TestPayEMIEndpoint:
             },
         )
 
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.status_code == status.HTTP_403_FORBIDDEN

@@ -27,7 +27,8 @@ def setup_test_environment() -> Generator:
     """
     # SECURITY: Test-only secret key
     os.environ["SECRET_KEY"] = "test-secret-key-do-not-use-in-production-12345678"
-    os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+    # Use PostgreSQL for tests (same as production)
+    os.environ["DATABASE_URL"] = "postgresql://postgres:postgres@postgres:5432/jade_smartbank"
     os.environ["RATE_LIMIT_ENABLED"] = "false"
 
     yield
@@ -43,27 +44,37 @@ def setup_test_environment() -> Generator:
 def test_db() -> Generator[Session, None, None]:
     """Create a test database session.
 
-    SECURITY: Uses in-memory SQLite, isolated per test.
+    SECURITY: Uses PostgreSQL test database, isolated per test with transactions.
     """
-    # Create test engine with in-memory SQLite
-    engine = create_engine(
-        "sqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
+    from sqlalchemy import event
+
+    # Use the actual PostgreSQL database from Docker
+    # Tests run inside transactions that are rolled back
+    TEST_DATABASE_URL = os.getenv(
+        "DATABASE_URL", "postgresql://postgres:postgres@postgres:5432/jade_smartbank"
     )
 
-    # Create all tables
-    Base.metadata.create_all(bind=engine)
+    # Create test engine with PostgreSQL
+    engine = create_engine(TEST_DATABASE_URL, poolclass=StaticPool)
 
-    # Create session
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    # Create a connection and begin a transaction
+    connection = engine.connect()
+    transaction = connection.begin()
+
+    # Create session bound to this connection
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=connection)
     session = TestingSessionLocal()
+
+    # Ensure tables exist (idempotent)
+    Base.metadata.create_all(bind=engine)
 
     try:
         yield session
     finally:
         session.close()
-        Base.metadata.drop_all(bind=engine)
+        # Rollback the transaction to clean up test data
+        transaction.rollback()
+        connection.close()
 
 
 @pytest.fixture(scope="function")
@@ -198,15 +209,15 @@ def unverified_user(test_db: Session, sample_password: str) -> User:
 @pytest.fixture
 def savings_account(test_db: Session, verified_user: User) -> Account:
     """Create a savings account for verified user."""
+    from decimal import Decimal
     account = Account(
         user_id=verified_user.id,
         account_number="JADE12345678901234",
         account_type="savings",
-        balance=50000.00,
-        currency="INR",
-        status="active",
+        balance=Decimal("50000.00"),
+        available_balance=Decimal("50000.00"),
+        is_active=True,
         ifsc_code="JADE0000001",
-        branch_name="Mumbai Main",
     )
     test_db.add(account)
     test_db.commit()
@@ -217,15 +228,15 @@ def savings_account(test_db: Session, verified_user: User) -> Account:
 @pytest.fixture
 def current_account(test_db: Session, verified_user: User) -> Account:
     """Create a current account for verified user."""
+    from decimal import Decimal
     account = Account(
         user_id=verified_user.id,
         account_number="JADE98765432109876",
         account_type="current",
-        balance=100000.00,
-        currency="INR",
-        status="active",
+        balance=Decimal("100000.00"),
+        available_balance=Decimal("100000.00"),
+        is_active=True,
         ifsc_code="JADE0000001",
-        branch_name="Mumbai Main",
     )
     test_db.add(account)
     test_db.commit()
