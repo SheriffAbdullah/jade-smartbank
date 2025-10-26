@@ -273,8 +273,9 @@ class TestIFSCValidation:
             "INVALID",  # Too short
             "SBIN1001234",  # 5th character not 0
             "SBI00001234",  # Only 3 letters
-            "SBIN000123A",  # Last char not alphanumeric pattern
+            "SBIN0001!@#",  # Special characters not allowed
             "123A0001234",  # First 4 not letters
+            "SBIN00012",  # Too short (only 9 chars)
             "",
             None,
         ]

@@ -64,3 +64,18 @@ class KYCStatusResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class KYCVerificationRequest(BaseModel):
+    """KYC verification request schema for admin."""
+
+    is_verified: bool = Field(..., description="Verification status")
+    admin_notes: Optional[str] = Field(None, max_length=500, description="Admin verification notes")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "is_verified": True,
+                "admin_notes": "All documents verified successfully"
+            }
+        }

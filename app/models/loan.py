@@ -26,18 +26,19 @@ class Loan(Base):
 
     # Foreign Keys
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    account_id = Column(UUID(as_uuid=True), ForeignKey("accounts.id"))
 
     # Loan Details
     loan_type = Column(
         String(50), nullable=False
-    )  # personal, home, vehicle, education, business
-    loan_amount = Column(Numeric(15, 2), nullable=False)
+    )  # personal, home, auto, education
+    principal_amount = Column(Numeric(15, 2), nullable=False)
     interest_rate = Column(Numeric(5, 2), nullable=False)
     tenure_months = Column(Integer, nullable=False)
+    purpose = Column(String(200))
 
     # EMI Calculation
     emi_amount = Column(Numeric(15, 2), nullable=False)
+    total_interest = Column(Numeric(15, 2), nullable=False)
     total_payable = Column(Numeric(15, 2), nullable=False)
 
     # Status
@@ -57,15 +58,17 @@ class Loan(Base):
     # Repayment
     outstanding_amount = Column(Numeric(15, 2))
     paid_amount = Column(Numeric(15, 2), default=Decimal("0.00"))
+    emis_paid = Column(Integer, default=0)
     next_emi_due_date = Column(Date)
 
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    closed_at = Column(DateTime)
 
     # Relationships
     user = relationship("User", back_populates="loans", foreign_keys=[user_id])
     emi_payments = relationship("LoanEMIPayment", back_populates="loan", cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<Loan {self.loan_type} - ₹{self.loan_amount}>"
+        return f"<Loan {self.loan_type} - ₹{self.principal_amount}>"
