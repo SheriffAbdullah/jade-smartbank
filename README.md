@@ -316,7 +316,7 @@ pytest -v
 # - Frontend goes live at: https://jade-smartbank.vercel.app
 ```
 
-**See**: [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment guide
+**See**: [DEPLOYMENT.md](DOCS/DEPLOYMENT.md) for detailed deployment guide
 
 ### Manual Docker Deployment (Backend)
 
@@ -406,8 +406,6 @@ jade-smartbank/
 ├── DEPLOYMENT.md            # Deployment guide
 ├── SECURITY.md              # Security documentation
 ├── SETUP.md                 # Setup instructions
-├── IMPLEMENTATION_STATUS.md  # Progress tracker
-├── MVP_COMPLETE.md          # Completion summary
 └── README.md                # This file
 ```
 
@@ -477,7 +475,7 @@ Every critical operation logged:
 - Resource affected
 - Success/failure status
 
-**See**: [SECURITY.md](SECURITY.md) for complete security documentation
+**See**: [SECURITY.md](DOCS/SECURITY.md) for complete security documentation
 
 ---
 
@@ -574,11 +572,13 @@ REFRESH_TOKEN_EXPIRE_DAYS=7
 - **[Database Design](DOCS/DATABASE_DESIGN.md)** - Complete schema
 - **[API Endpoints](DOCS/API_ENDPOINTS.md)** - All 22 endpoints
 - **[Quick Reference](DOCS/QUICK_REFERENCE.md)** - Cheat sheet
-- **[Security](SECURITY.md)** - Security features
-- **[Setup](SETUP.md)** - Development setup
-- **[Deployment](DEPLOYMENT.md)** - Cloud deployment
-- **[Implementation Status](IMPLEMENTATION_STATUS.md)** - Progress tracker
-- **[MVP Complete](MVP_COMPLETE.md)** - Completion summary
+- **[Security](DOCS/SECURITY.md)** - Security features
+- **[Setup](SETUP.md)** - Development setup guide
+- **[Deployment](DOCS/DEPLOYMENT.md)** - Cloud deployment
+- **[Implementation Status](DOCS/IMPLEMENTATION_STATUS.md)** - Progress tracker
+- **[MVP Complete](DOCS/MVP_COMPLETE.md)** - Completion summary
+- **[Virtual Environment](DOCS/VENV_SETUP.md)** - venv setup guide
+- **[Test Reports](DOCS/TEST_REPORT_GUIDE.md)** - How to generate test reports
 
 **Frontend Documentation**
 - **[Frontend README](../jade-smartbank-frontend/README.md)** - Frontend overview
@@ -667,9 +667,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Quick Links**
 
-[📚 Documentation](DOCS/) • [🔗 API Reference](DOCS/API_ENDPOINTS.md) • [🔒 Security](SECURITY.md) • [🚀 Deploy](DEPLOYMENT.md)
+[📚 Documentation](DOCS/) • [🔗 API Reference](DOCS/API_ENDPOINTS.md) • [🔒 Security](DOCS/SECURITY.md) • [🚀 Deploy](DOCS/DEPLOYMENT.md)
 
-[💻 Frontend Docs](../jade-smartbank-frontend/README.md) • [⚡ Quick Start](QUICKSTART.md) • [📊 Status](IMPLEMENTATION_STATUS.md)
+[💻 Frontend Docs](../jade-smartbank-frontend/README.md) • [⚡ Quick Start](QUICKSTART.md) • [📊 Status](DOCS/IMPLEMENTATION_STATUS.md)
 
 ---
 
