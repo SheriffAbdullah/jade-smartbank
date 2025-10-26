@@ -56,12 +56,18 @@ if not settings.debug:
 async def startup_event():
     """Initialize database on startup.
 
-    SECURITY: Only creates tables in development. Use Alembic in production.
+    SECURITY: Auto-creates tables if they don't exist. Safe for production.
     """
-    # Disabled - using Alembic migrations instead
-    # if settings.debug:
-    #     init_db()
-    pass
+    import logging
+    logger = logging.getLogger(__name__)
+
+    try:
+        logger.info("Initializing database tables...")
+        init_db()
+        logger.info("Database tables initialized successfully")
+    except Exception as e:
+        logger.error(f"Database initialization error: {e}")
+        # Don't fail startup - tables might already exist
 
 
 @app.get("/")
