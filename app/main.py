@@ -96,6 +96,17 @@ async def health_check():
     return {"status": "healthy"}
 
 
+@app.post("/seed-demo-data")
+async def seed_demo_data():
+    """Manually trigger demo data seeding (for initial setup only)."""
+    try:
+        from seed_dummy_data import seed_data
+        seed_data()
+        return {"status": "success", "message": "Demo data seeded successfully"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 # Import and include routers
 from app.api.v1.routes import accounts, admin, auth, loans, transactions
 
