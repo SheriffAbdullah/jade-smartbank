@@ -7,6 +7,7 @@ from typing import Optional
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy.orm import Session
 
 from app.core.audit import AuditAction, AuditLogger
 from app.core.security import extract_user_id_from_token
@@ -96,6 +97,52 @@ async def get_current_user_optional(
         request.state.user_id = user_id
 
     return user_id
+
+
+async def get_current_user(
+    user_id: str = Depends(get_current_user_id),
+):
+    """Get current user model from database.
+
+    SECURITY: Fetches full user object after token validation.
+
+    Args:
+        user_id: Validated user ID from token
+
+    Returns:
+        User: Current user model
+
+    Raises:
+        HTTPException: If user not found
+
+    Example:
+        >>> from app.db.base import get_db
+        >>> @app.get("/me")
+        >>> async def get_me(
+        >>>     current_user: User = Depends(get_current_user),
+        >>>     db: Session = Depends(get_db)
+        >>> ):
+        >>>     return current_user
+    """
+    # Import here to avoid circular import
+    from app.models import User
+    from app.db.base import get_db
+
+    # Get db session
+    db = next(get_db())
+
+    try:
+        user = db.query(User).filter(User.id == user_id).first()
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found"
+            )
+
+        return user
+    finally:
+        db.close()
 
 
 def require_role(required_role: str):

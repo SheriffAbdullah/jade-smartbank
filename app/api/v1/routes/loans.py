@@ -8,13 +8,14 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_client_ip, get_current_user, get_db, require_role
+from app.core.dependencies import get_client_ip, get_current_user
+from app.db.base import get_db
 from app.models import User
 from app.schemas.loan import (
     EMICalculationRequest,
     EMICalculationResponse,
     EMIScheduleResponse,
-    LoanApplication,
+    LoanApplicationRequest,
     LoanEMIPaymentRequest,
     LoanEMIPaymentResponse,
     LoanResponse,
@@ -74,7 +75,7 @@ async def calculate_emi(
 @router.post("", response_model=LoanResponse, status_code=status.HTTP_201_CREATED)
 async def apply_for_loan(
     request: Request,
-    data: LoanApplication,
+    data: LoanApplicationRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
     ip_address: str = Depends(get_client_ip),

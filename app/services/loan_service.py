@@ -13,7 +13,7 @@ from app.core.audit import AuditAction, AuditLogger
 from app.models import Account, Loan, LoanEMIPayment, Transaction, User
 from app.schemas.loan import (
     EMICalculationRequest,
-    LoanApplication,
+    LoanApplicationRequest,
     LoanEMIPaymentRequest,
 )
 from app.utils import generate_reference_number
@@ -112,7 +112,7 @@ class LoanService:
 
     @staticmethod
     def apply_for_loan(
-        db: Session, user_id: str, request: LoanApplication, ip_address: str
+        db: Session, user_id: str, request: LoanApplicationRequest, ip_address: str
     ) -> Loan:
         """Apply for a loan.
 
@@ -218,7 +218,7 @@ class LoanService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="loan",
-            resource_id=loan.id,
+            resource_id=str(loan.id),
             details={
                 "loan_type": request.loan_type,
                 "principal": str(request.principal_amount),
@@ -449,7 +449,7 @@ class LoanService:
             user_id=user_id,
             ip_address=ip_address,
             resource_type="emi_payment",
-            resource_id=emi_payment.id,
+            resource_id=str(emi_payment.id),
             details={
                 "loan_id": str(loan_id),
                 "emi_number": request.emi_number,
@@ -529,7 +529,7 @@ class LoanService:
             user_id=admin_id,
             ip_address=ip_address,
             resource_type="loan",
-            resource_id=loan.id,
+            resource_id=str(loan.id),
             details={
                 "action": "approved",
                 "user_id": str(loan.user_id),
@@ -580,7 +580,7 @@ class LoanService:
             user_id=admin_id,
             ip_address=ip_address,
             resource_type="loan",
-            resource_id=loan.id,
+            resource_id=str(loan.id),
             details={
                 "action": "rejected",
                 "user_id": str(loan.user_id),
