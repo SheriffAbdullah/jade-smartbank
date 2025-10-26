@@ -1,8 +1,6 @@
 # 🏦 Jade SmartBank
 
-**Secure Banking Platform for India** - A complete full-stack banking application built with FastAPI, React, PostgreSQL, and industry-standard security practices.
-
-**🎉 FULL-STACK MVP COMPLETE & LIVE!**
+**Secure Banking Platform** - A complete full-stack banking application built with FastAPI, React, PostgreSQL, and industry-standard security practices.
 
 ## 🌐 Live Deployments
 
